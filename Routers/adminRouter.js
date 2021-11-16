@@ -14,8 +14,60 @@ const catModel = require('../models/categoryModel')
 router.get('/', (req, res) => {
     res.send('hello admin')
 })
+// verify admin astart
+router.get('/loggedIn',async  (req, res) => {
+  
+    try
+    {
+      console.log('reached');
+     const response = {}
+      const token = req.cookies.adminToken	
+     if (!token)
+     {
+      
+       return res.json(false)
+     }
+    const user = jwt.verify(token, process.env.JWT_SECRET_ADMIN)
+    if (user)
+     {
+     return  res.json(true)
+     }
+      else{
+
+       res.send(false)
+      }
+      //  req.user = verified.user
+    //  console.log(user);
+  
+   
+  } catch (error)
+  {
+    console.log(error);
+    res.json(false)
+  }
+  })
+
+
+// verify admin end
 
 // ================= ADMIN SIGNUP START +===============================
+// admin logout start
+
+
+
+router.get('/logout', (req, res) => {
+    console.log('reached');
+    res.cookie("adminToken", "", {
+  
+        httpOnly: true,
+        expires:new Date(0)
+    }).send()
+  })
+// admin logout end
+
+
+
+
 
 router.post('/signup', async (req, res) => {
     try
@@ -66,20 +118,20 @@ router.post('/login', async (req, res) => {
         console.log('vannath ' + name, password);
         if (!name || !password)
         {
-            return res.status(406).json({ error: 'Please fill All' })
+            return res.json({ response: 'Please fill All' })
         }
 
         const existAdmin = await adminModel.findOne({ name })
         if (!existAdmin)
         {
-            return res.status(406).json({ response: 'Admin not Found' })
+            return res.json({ response: 'Admin not Found' })
         }
 
         const { passwordHash } = existAdmin
         const passwordVerify = await bcrypt.compare(password, passwordHash)
         if (!passwordVerify)
         {
-            return res.status(406).json({ response: 'Password not a match' })
+            return res.json({ response: 'Incorrect Password' })
         }
 
 
@@ -183,23 +235,22 @@ res.json(category)
 
 router.post('/category/add', async (req, res) => {
 
-
     try
     {
-        const { category } = req.body
-
-        if (!category)
+        console.log(req.body);
+        const { categoryName } = req.body
+        const category=categoryName
+console.log(categoryName);
+        if (!categoryName)
         {
-            return res.status(406).json({ response: "Please fill all" })
+            return res.json({ response: "Please fill all" })
         }
 
-        const existcat = await catModel.findOne({ category })
-        console.log(
-           existcat 
-        );
+        const existcat = await catModel.findOne({ category:categoryName })
+        console.log(existcat );
         if (existcat)
         {
-            return res.status(406).json({ response: "Category already exist " })
+            return res.json({ response: "Category already exist " })
         } else
         {
             const newCategory = new catModel({

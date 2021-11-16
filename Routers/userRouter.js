@@ -76,16 +76,16 @@ router.post("/signin", async (req, res) => {
     }
     if (!existUser)
     {
-      return res.status(406).json({ response: "User not found" });
+      return res.json({ response: "User not found" });
     }
     const { isActive, passwordHash, _id } = existUser;
 
     if (!isActive) {
-      return res.status(406).json({ response: "User Blocked" });
+      return res.json({ response: "User Blocked" });
     }
     const passwordVerify = await bcrypt.compare(password, passwordHash);
     if (!passwordVerify) {
-      return res.status(406).json({ response: "Incorrect Password" });
+      return res.json({ response: "Incorrect Password" });
     }
 
     // JWT token creation start
