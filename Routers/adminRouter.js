@@ -6,6 +6,12 @@ const userModel = require('../models/userModel')
 const catModel = require('../models/categoryModel')
 const {cloudinary} =require('./utils/cloudinary')
 const uploads=require("./utils/multer")
+const { route } = require('./userRouter')
+
+
+
+
+
 
 
 router.get('/', (req, res) => {
@@ -467,43 +473,7 @@ router.post('/category/sub/delete', async (req, res) => {
 // ===================PRODUCT MANAGMENT START===========================================
 //============================PROFUCT MANAGMNET END===================================================
 
-const multer=require("multer");
-const storage = multer.memoryStorage();
-const multerUploads = multer({ storage }).single("image");
-
-router.post('/category/upload/image',multerUploads,(req,res)=>{
-
-    console.log(req.file);
-
-    try {
-        
 
 
-
-console.log('sds ',req.file)
-
-
-
-
-
-
-
-
-
-        // const {fileStr} =req.body.data
-        // console.log('image reached');
-
-        // const uploadResponse =await cloudinary.uploader.upload(fileStr,{
-
-        //     upload_preset:'fnpbm7gw'
-        // })
-        // console.log(uploadResponse);
-        res.json({msg:'yayyyy'})
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({err:'somethingwent wrong'})
-    }
-
-})
 
 module.exports = router

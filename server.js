@@ -7,7 +7,6 @@ const cors = require('cors')
 const { urlencoded } = require('express')
 const app = express()
 const fileupload = require('express-fileupload');
-const { cloudinary } = require('./Routers/utils/cloudinary')
 
 dotenv.config()
 
@@ -47,51 +46,11 @@ app.use(cors({
 // set the Routes
 app.use('/user', require('./Routers/userRouter'))
 app.use('/admin', require('./Routers/adminRouter'))
-
+app.use('/admin/product',require('./Routers/productRouters'))
 
 
 app.get('/', (req, res) => {
     res.send('hello')
-})
-
-var multer = require('multer');
-let storage = multer.diskStorage({})
-let upload = multer({ storage })
-
-app.post("/demo", upload.array("image"), async (req, res) => {
-    try {
-        console.log("Demo");
-
-        let files = req.files;
-
-        // console.log(files);
-
-        let arr = [];
-        let count = 0;
-
-
-        for (let file of files) {
-            console.log(1);
-            const uploadResponse = await cloudinary.uploader.upload(file.path, {
-                upload_preset: 'fnpbm7gw'
-            })
-            console.log(2);
-            count++;
-            arr.push(uploadResponse.secure_url);
-            if (count === 3) {
-console.log('herererer'+arr)
-                res.json(arr);
-                
-            }
-        }
-
-    } catch (e) {
-        console.log('cloudinary error'+e.message);
-    }
-
-    //console.log(files);
-
-
 })
 
 
