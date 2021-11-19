@@ -1,9 +1,10 @@
 const router = require('express').Router()
-const { addProduct, viewProduct, deleteProduct } = require('../helpers/ProductHelpers');
+const { addProduct, viewProduct, deleteProduct, editProduct } = require('../helpers/ProductHelpers');
 const { cloudinary } = require('./utils/cloudinary')
 
 // multer confogure
 var multer = require('multer');
+const { response } = require('express');
 let storage = multer.diskStorage({})
 let upload = multer({ storage })
 
@@ -11,7 +12,6 @@ let upload = multer({ storage })
 // view product start
 
 router.get('/', (req, res) => {
-    console.log('recdhed add product');
     viewProduct().then((response) => {
         res.json(response)
     })
@@ -90,4 +90,16 @@ router.post("/addImage", upload.array("image"), async (req, res) => {
 
 
 // /add product end
+// Image edit screen start
+
+router.post('/edit',(req,res)=>{
+    editProduct(req.body).then(response=>{
+
+res.json(response);
+
+    })
+})
+
+
+// imAGE EDIT SCREEEN ENDD
 module.exports = router

@@ -22,7 +22,7 @@ router.get('/loggedIn',async  (req, res) => {
   
     try
     {
-      console.log('reached');
+
      const response = {}
       const token = req.cookies.adminToken	
      if (!token)
@@ -59,7 +59,7 @@ router.get('/loggedIn',async  (req, res) => {
 
 
 router.get('/logout', (req, res) => {
-    console.log('reached');
+
     res.cookie("adminToken", "", {
   
         httpOnly: true,
@@ -118,7 +118,6 @@ router.post('/login', async (req, res) => {
     try
     {
         const { name, password } = req.body
-        console.log('vannath ' + name, password);
         if (!name || !password)
         {
             return res.json({ response: 'Please fill All' })
@@ -372,10 +371,10 @@ router.get('/category/sub/:id', async (req, res) => {
 router.post('/category/sub/add/', async(req, res) => {
     
 try {
-    
-    const { subArray,_id } = req.body
+    console.log('here subcat');
+    const { subCat,_id } = req.body
 
-    if (!subArray)
+    if (!subCat)
     {
       return  res.status(406).json({ response: 'fill all' })
         
@@ -388,7 +387,7 @@ try {
     }
     // db.categories.update({_id)},{$addToSet:{subCat:{$each:['hello','seen','achaa']}}})
  
-  const response= await catModel.updateOne({ _id }, { $addToSet: { subCat: { $each: subArray } } })
+  const response= await catModel.updateOne({ _id }, { $addToSet: { subCat } })
   
     res.json(response.acknowledged)
 }
@@ -443,6 +442,7 @@ router.post('/category/sub/delete', async (req, res) => {
     
     try
     {
+        res.send('hiii')
         
         const { _id, subCat } = req.body
         

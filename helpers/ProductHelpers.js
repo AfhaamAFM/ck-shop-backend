@@ -31,9 +31,9 @@ let quantity =parseInt(small)+parseInt(medium)+parseInt(large)
                name, category, subCat, price, description, small, medium, large,imageUrl,quantity
 
             })
-console.log('reached');
+
             newProduct.save().then(() => {
-                resolve(true)
+              return resolve(true)
             })
 
         })
@@ -73,9 +73,40 @@ if(!existProduct){
 
 
         })
-    }
+    },
 
 
     // delete product end
+    // Edit product start
+
+
+    editProduct:(product)=>{
+
+return new Promise(async(resolve,reject)=>{
+
+
+    const {  name, category, subCat, price, description, small, medium, large, imageUrl,_id  } = product
+
+    if (!name || !price || !category || !subCat) {
+        return resolve({ response: 'Please fill all' })
+    }
+    // console.log(product)
+
+    const existProduct = await productModel.findOne({ name })
+
+    if (existProduct) {
+        return resolve({ response: 'Product already exist' })
+    }
+let quantity =parseInt(small)+parseInt(medium)+parseInt(large)
+
+
+const  data = await productModel.updateOne({_id},{$set:{ name, category, subCat, price, description, small, medium, large,imageUrl,quantity
+}})
+
+console.log(data);
+resolve(true)
+
+})}
+    // edit product end
 
 }

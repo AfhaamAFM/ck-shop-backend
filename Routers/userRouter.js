@@ -110,7 +110,7 @@ router.get('/loggedIn',async  (req, res) => {
   
   try
   {
-    console.log('reached');
+   
    const response = {}
     const token = req.cookies.userToken
     console.log('saasd'+token);
