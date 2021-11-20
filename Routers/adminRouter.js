@@ -7,6 +7,7 @@ const catModel = require('../models/categoryModel')
 const {cloudinary} =require('./utils/cloudinary')
 const uploads=require("./utils/multer")
 const { route } = require('./userRouter')
+const { editProductCat } = require('../helpers/ProductHelpers')
 
 
 
@@ -313,22 +314,27 @@ router.post('/category/edit', async (req, res) => {
     
     try
     {
-    
-        const { _id,category}=req.body
-        const existcat = await catModel.findOne({_id})
+    console.log(req.body);
+        const { selectedCategory,newCategory}=req.body
+        const existcat = await catModel.findOne({category:selectedCategory})
         if (!existcat)
         {
-            return  res.status(406).json({response:'Category not found'})
+            return  res.json({response:'Category not found'})
         }
-        const existcat2 = await catModel.findOne({ category })
+        const existcat2 = await catModel.findOne({ category:newCategory })
         if (existcat2)
         {
-            return  res.status(406).json({response:'Category exist'})
+            return  res.json({response:'Category exist'})
         }
 
-        catModel.updateOne({ _id }, { $set: { category } }).then(response => {
+        catModel.updateOne({ category:selectedCategory }, { $set: { category:newCategory } }).then(response => {
          
-            res.json(true)
+editProductCat(selectedCategory,newCategory).then((response)=>{
+
+    res.json(response)
+    
+})
+
         })
 
 } catch (error) {

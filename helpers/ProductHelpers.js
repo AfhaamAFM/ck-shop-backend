@@ -106,7 +106,26 @@ const  data = await productModel.updateOne({_id},{$set:{ name, category, subCat,
 console.log(data);
 resolve(true)
 
-})}
+})},
     // edit product end
+
+
+    // Edit product with category edit
+editProductCat:(category,newCat)=>{
+
+    return new Promise((resolve,reject)=>{
+
+productModel.updateMany({category},{$set:{category:newCat}}).then(()=>{
+
+
+    resolve(true)
+})
+
+
+
+
+
+    })
+}
 
 }
