@@ -411,21 +411,22 @@ router.post('/category/sub/edit/', async (req, res) => {
      
     try {
         
-const { _id, subCat,newSubCat } = req.body
+        console.log(req.body);
+const {_id,subCat,newsubCat} = req.body
 
-        if (!_id || !subCat||!newSubCat)
+        if (!_id || !subCat||!newsubCat)
         {
-          return  res.status(406).json({ response: 'Category not found' })
+          return  res.json({ response: 'fill all' })
         }
         const existCat = await catModel.find({_id})
         if (!existCat)
         {
-            console.log('error');
-          return   res.status(406).json({ response: 'Category not found' })
+           
+          return  res.json({ response: 'Category not found' })
         }
 
-  const response= await catModel.updateOne({ _id,subCat}, { $set: { "subCat.$":newSubCat   } })
-res.json(response.acknowledged)
+  const response= await catModel.updateOne({ _id,subCat}, { $set: { "subCat.$":newsubCat   } })
+res.json(true)
     } catch (error) {
         console.log(error);
     }

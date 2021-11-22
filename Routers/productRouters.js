@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { addProduct, viewProduct, deleteProduct, editProduct } = require('../helpers/ProductHelpers');
+const { addProduct, viewProduct, deleteProduct, editProduct, filterProductbyCategory, filterProductbySubCategory, searchProduct } = require('../helpers/ProductHelpers');
 const { cloudinary } = require('./utils/cloudinary')
 
 // multer confogure
@@ -90,16 +90,55 @@ router.post("/addImage", upload.array("image"), async (req, res) => {
 
 
 // /add product end
-// Image edit screen start
+// Filter product by category start
 
-router.post('/edit',(req,res)=>{
-    editProduct(req.body).then(response=>{
 
-res.json(response);
+router.get('/filter/:category',(req,res)=>{
 
-    })
+filterProductbyCategory(req.params.category).then((response)=>{
+
+res.json(response)
+
+})
+
+})
+
+router.get('/subfilter/:category/:subCat',(req,res)=>{
+
+const {category,subCat}=req.params
+console.log(req.params);
+filterProductbySubCategory(category,subCat).then((response)=>{
+
+res.json(response)
+
+}).catch(err=>{
+
+console.error(err+"  filter by subcategory");
+
+})
 })
 
 
-// imAGE EDIT SCREEEN ENDD
+
+// filter products by cateogry end
+
+
+// Search by keyword start
+
+router.get('/Searchfilter/:word',(req,res)=>{
+
+console.log(req.params.word);
+searchProduct(req.params.word).then((response)=>{
+    
+    res.json(response)
+    
+    }).catch(err=>{
+    
+    console.error(err+"  filter by search");
+    
+    })
+    })
+
+// search product by keyword end
+
 module.exports = router
