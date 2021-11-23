@@ -192,7 +192,7 @@ searchProduct:(word)=>{
 
 return new Promise((resolve,reject)=>{
 
-productModel.find({name:{$regex:word,$options: 'i'}}).then(res=>{
+productModel.find({name: {$regex:word,$options: 'i'}}).then(res=>{
 console.log(res);
 resolve(res)
 
