@@ -327,12 +327,12 @@ router.get('/category/delete/:id', async (req, res) => {
 
 // ---------------------- EDIT CATEGORY START---------------------------------------
 router.post('/category/edit', async (req, res) => {
-    
+ 
     try
     {
     console.log(req.body);
-        const { selectedCategory,newCategory}=req.body
-        const existcat = await catModel.findOne({category:selectedCategory})
+        const { oldCategory,newCategory}=req.body
+        const existcat = await catModel.findOne({category:oldCategory})
         if (!existcat)
         {
             return  res.json({response:'Category not found'})
@@ -343,9 +343,9 @@ router.post('/category/edit', async (req, res) => {
             return  res.json({response:'Category exist'})
         }
 
-        catModel.updateOne({ category:selectedCategory }, { $set: { category:newCategory } }).then(response => {
+        catModel.updateOne({ category:oldCategory }, { $set: { category:newCategory } }).then(response => {
          
-editProductCat(selectedCategory,newCategory).then((response)=>{
+editProductCat(oldCategory,newCategory).then((response)=>{
 
     res.json(response)
     
