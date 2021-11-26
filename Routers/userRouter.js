@@ -2,6 +2,16 @@ const router = require("express").Router();
 const userModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const userHelpers=require('../helpers/userHelpers');
+const { addAddress, deleteAddress } = require("../helpers/userHelpers");
+
+
+
+
+
+
+
+
 
 // root start
 router.get("/", (req, res) => {
@@ -14,7 +24,7 @@ router.get("/", (req, res) => {
 router.post("/signup", async (req, res) => {
   try
   {
-    console.log('undd');
+    // console.log('undd');
     const { name, password, phone, email } = req.body;
     if (!name || !email || !password || !phone) {
       return res.status(406).json({ response: "Please fill All" });
@@ -92,7 +102,7 @@ router.post("/signin", async (req, res) => {
     const userToken = jwt.sign({ user: _id }, process.env.JWT_SECRET_USER);
 
     //sending token as jwt
-    console.log('OKKO FOISEDNFUISDFBIUSDBFUI');
+    // console.log('OKKO FOISEDNFUISDFBIUSDBFUI');
     res
       .cookie("userToken", userToken, {
         httpOnly: true,
@@ -113,7 +123,7 @@ router.get('/loggedIn',async  (req, res) => {
    
    const response = {}
     const token = req.cookies.userToken
-    console.log('saasd'+token);
+    // console.log('saasd'+token);
    if (!token)
    {
     
@@ -156,4 +166,89 @@ router.get('/logout', (req, res) => {
   }).send()
 })
 // ===============USER LOGOUT END====================
+
+
+
+// ==========================user adress add==========start=================
+
+
+router.post('/address/add',(req,res)=>{
+
+  const token = req.cookies.userToken
+const address=req.body
+
+  if(!token){
+  
+    return res.json({'response':'User not logged in'})
+  }
+  const {user:_id} = jwt.verify(token, process.env.JWT_SECRET_USER)
+  if (!_id)
+  {
+  return  res.json({'response':'User not verified'})
+  }
+  
+
+
+  const {name,pincode,street,landmark,district,state,number,flatNo}=address
+
+
+  if(!name||!pincode||!street||!landmark||!district||!state||!number||!flatNo){
+
+    return  res.json({'response':'Fill all'})
+  }
+
+addAddress(_id,address).then((response)=>{
+
+res.json(response)
+
+}).catch((err)=>{
+
+
+  console.log('this is address add erre  '+err);
+})
+
+
+})
+
+
+// =========================user addresss add ===========end=================
+
+
+
+// ======================DELETE ADDRESS START================================
+
+
+router.get('/address/delete/:addressId',(req,res)=>{
+
+
+  const token = req.cookies.userToken
+const addressId=req.params.addressId
+
+  if(!token){
+  
+    return res.json({'response':'User not logged in'})
+  }
+  const {user:_id} = jwt.verify(token, process.env.JWT_SECRET_USER)
+  if (!_id)
+  {
+  return  res.json({'response':'User not verified'})
+  }
+
+
+  deleteAddress(_id,addressId).then((response)=>{
+
+
+    res.json(response)
+  })
+
+
+})
+
+
+
+
+
+
+
+// =======================DELETE ADDRESS END================================= 
 module.exports = router;
