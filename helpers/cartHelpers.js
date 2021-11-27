@@ -29,15 +29,18 @@ module.exports = {
                     if (isProductSize) {
 
                         const addedProduct = await productModel.findOne({ _id: product })
-
                         const b = isProductSize.cartItem.find(v => v.size === size)
+                        const cartItemId=b._id
                         if (b.quantity === addedProduct[size])
+                        {
                             return resolve({ 'response': 'You added all the product in the stock' })
 
+                        }else {
+                            const incrementquantity = await cartModel.updateOne({ user, 'cartItem._id': cartItemId }, { $inc: { 'cartItem.$.quantity': 1 } })
 
-                        const incrementquantity = await cartModel.updateOne({ user, 'cartItem.product': product }, { $inc: { 'cartItem.$.quantity': 1 } })
-                        return resolve({ 'response': 'quantity increased by 1' })
-
+                            return resolve({ 'response': 'quantity increased by 1',incrementquantity })
+                        }
+                       
                     }
 
 
@@ -96,7 +99,11 @@ console.log('This is a delete cart error '+err);
 
 
 
-})
+})  },
+
+setQuantity:()=>{
+
+}
 
 
 
@@ -105,7 +112,7 @@ console.log('This is a delete cart error '+err);
 
 
 
-    }
+  
 
 
 

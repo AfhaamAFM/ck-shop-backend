@@ -1,5 +1,10 @@
 const router = require("express").Router();
 const { addToCart, deleteCart } = require("../helpers/cartHelpers");
+const jwt = require("jsonwebtoken");
+
+
+
+
 
 router.get('/', (req, res) => {
 
@@ -11,10 +16,36 @@ router.get('/', (req, res) => {
 // ==================ADD TO CART  START====================
 router.post('/add', (req, res) => {
     try {
-        const { user, cartItem } = req.body
+
+
+
+
+
+        const token = req.cookies.userToken
+          if(!token){
+          
+            return res.json({'response':'User not logged in'})
+            console.log('JKBJKBHJD');
+          }
+          const {user} = jwt.verify(token, process.env.JWT_SECRET_USER)
+          if (!user)
+          {
+            console.log('dsdsdsd');
+
+          return  res.json({'response':'User not verified'})
+          }
+
+
+
+
+
+
+
+
+        const {product,size,price } = req.body
+        const cartItem={product,size,price }
         addToCart(user, cartItem).then(response => {
 
-            console.log(response);
             res.json(response)
 
 
