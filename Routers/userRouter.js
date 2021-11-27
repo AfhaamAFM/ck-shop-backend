@@ -176,7 +176,6 @@ router.post('/address/add',(req,res)=>{
 
   const token = req.cookies.userToken
 const address=req.body
-
   if(!token){
   
     return res.json({'response':'User not logged in'})
