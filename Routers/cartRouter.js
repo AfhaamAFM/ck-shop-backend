@@ -68,26 +68,22 @@ router.post('/add', (req, res) => {
           if(!token){
           
             return res.json({'response':'User not logged in'})
-            console.log('JKBJKBHJD');
           }
           const {user} = jwt.verify(token, process.env.JWT_SECRET_USER)
           if (!user)
           {
-            console.log('dsdsdsd');
 
           return  res.json({'response':'User not verified'})
           }
 
 
+console.log('VANATHHHHH',req.body);
 
 
-
-
-
-
-        const {product,size,price } = req.body
-        const cartItem={product,size,price }
-        addToCart(user, cartItem).then(response => {
+        const {cartItem} = req.body
+        console.log('VANATHHH 2',cartItem);
+        // const cartItem={product,size,price }
+        addToCart(user, req.body).then(response => {
 
             res.json(response)
 
@@ -125,9 +121,29 @@ router.get('/delete/:id', (req, res) => {
 
     try {
 
-        const id = req.params.id
 
-        deleteCart(id).then((response) => {
+
+        const token = req.cookies.userToken
+        if(!token){
+        
+          return res.json({'response':'User not logged in'})
+          console.log('JKBJKBHJD');
+        }
+        const {user:_id} = jwt.verify(token, process.env.JWT_SECRET_USER)
+        if (!_id)
+        {
+          console.log('dsdsdsd');
+
+        return  res.json({'response':'User not verified'})
+        }
+
+
+
+
+
+        const cartId = req.params.id
+
+        deleteCart(_id,cartId).then((response) => {
 res.json(response)
 
         }).catch(err => {

@@ -11,7 +11,7 @@ module.exports = {
     addToCart: (user, cartItem) => {
 
         return new Promise(async (resolve, reject) => {
-
+console.log('VANATHHH 3',user,cartItem);
             const { product, price, quantity, size } = cartItem
             const existCart = await cartModel.findOne({ user })
 
@@ -71,21 +71,22 @@ module.exports = {
         })
     },
 
-    deleteCart:(_id)=>{
+    deleteCart:(_id,cartId)=>{
 
 return new Promise (async(resolve,reject)=>{
 
+console.log(_id);
 
+const isExist = await cartModel.findOne({user:_id})
 
-const isExist = await cartModel.findOne({_id})
-
-console.log(isExist);
 if(!isExist){
 
 return resolve({response:'Item not found'})
 }
+cartModel.updateOne({'cartItem._id':cartId},{$pull:{'cartItem':{'_id':cartId}}}).then(res=>{
 
-cartModel.deleteOne({_id}).then(res=>{
+
+console.log('Thiss',res);
 
 return resolve(true)
 
@@ -118,7 +119,6 @@ if(!isCart){
   
 }
 
-console.log(user);
 
 const cartItem= await cartModel.aggregate([
     {$match:{ user:ObjectId(user) } },
