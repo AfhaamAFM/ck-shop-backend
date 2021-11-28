@@ -1,17 +1,60 @@
 const router = require("express").Router();
-const { addToCart, deleteCart } = require("../helpers/cartHelpers");
+const { addToCart, deleteCart, getCartItems } = require("../helpers/cartHelpers");
 const jwt = require("jsonwebtoken");
 
 
 
-
+//========================================== GET CART ITEMS START=======================================
 
 router.get('/', (req, res) => {
 
-    res.send('dsdsdsd')
+    try {
+
+        const token = req.cookies.userToken
+          if(!token){
+          
+            return res.json({'response':'User not logged in'})
+            console.log('JKBJKBHJD');
+          }
+          const {user} = jwt.verify(token, process.env.JWT_SECRET_USER)
+          if (!user)
+          {
+            console.log('dsdsdsd');
+
+          return  res.json({'response':'User not verified'})
+          }
+
+
+getCartItems(user).then(response=>{
+
+res.json(response)
+
+
+}).catch(err=>{
+
+
+    console.log('this is a get cart item '+error);
 
 
 })
+
+
+        
+    } catch (error) {
+        
+
+        console.log('this is a get cart item '+error);
+    }
+
+
+})
+
+
+
+
+
+// ==========================================GET CART ITEMS END=========================================
+
 
 // ==================ADD TO CART  START====================
 router.post('/add', (req, res) => {

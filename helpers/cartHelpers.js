@@ -101,7 +101,38 @@ console.log('This is a delete cart error '+err);
 
 })  },
 
-setQuantity:()=>{
+getCartItems:(user)=>{
+
+    return new Promise(async(resolve,reject)=>{
+
+const isCart =await cartModel.findOne({user})
+
+if(!isCart){
+
+    console.log('No CART');
+    const newCart = new cartModel({ user})
+    await newCart.save();
+
+    const isCart =await cartModel.findOne({user})    
+    return resolve(isCart)
+  
+}
+
+console.log(user);
+
+const cartItem= await cartModel.aggregate([
+    {$match:{ user:ObjectId(user) } },
+    {$unwind:'$cartItem'},
+    {$lookup:{from:'products',localField:"cartItem.product",foreignField: '_id',as:'cartProduct'}}
+])
+
+
+resolve(cartItem);
+
+
+
+
+    })
 
 }
 
