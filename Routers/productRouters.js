@@ -106,9 +106,8 @@ res.json(response)
 router.get('/subfilter/:category/:subCat',(req,res)=>{
 
 const {category,subCat}=req.params
-console.log(req.params);
 filterProductbySubCategory(category,subCat).then((response)=>{
-
+console.log('dsd');
 res.json(response)
 
 }).catch(err=>{

@@ -122,7 +122,7 @@ router.get('/delete/:id', (req, res) => {
     try {
 
 
-
+console.log('reach here');
         const token = req.cookies.userToken
         if(!token){
         

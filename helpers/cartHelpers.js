@@ -122,12 +122,11 @@ if(!isCart){
 
 const cartItem= await cartModel.aggregate([
     {$match:{ user:ObjectId(user) } },
-    {$unwind:'$cartItem'},
+ 
     {$lookup:{from:'products',localField:"cartItem.product",foreignField: '_id',as:'cartProduct'}}
 ])
 
-
-resolve(cartItem);
+resolve(cartItem[0]);
 
 
 

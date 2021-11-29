@@ -3,7 +3,7 @@ const userModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const userHelpers=require('../helpers/userHelpers');
-const { addAddress, deleteAddress } = require("../helpers/userHelpers");
+const { addAddress, deleteAddress, editUser, changePassword } = require("../helpers/userHelpers");
 
 
 
@@ -243,11 +243,78 @@ const addressId=req.params.addressId
 
 })
 
-
-
-
-
-
-
 // =======================DELETE ADDRESS END================================= 
+
+// =================Edit user details===========================
+router.post('/edit',(req,res)=>{
+
+
+  const token = req.cookies.userToken
+  if(!token){
+  
+    return res.json({'response':'User not logged in'})
+    console.log('JKBJKBHJD');
+  }
+  const {user:_id} = jwt.verify(token, process.env.JWT_SECRET_USER)
+  if (!_id)
+  {
+    console.log('dsdsdsd');
+
+  return  res.json({'response':'User not verified'})
+  }
+
+
+const {name,email}=req.body
+
+
+editUser(_id,name,email).then(response=>{
+
+  res.json(response)
+}).catch(err=>{
+
+console.log('This is user edit err +'+err);
+
+})
+
+
+})
+// =================Edit user details==========================
+
+
+
+
+// ==================================================Change Password start=================================
+
+
+router.post('/changePassword',async (req,res)=>{
+
+  const token = req.cookies.userToken
+  if(!token){
+  
+    return res.json({'response':'User not logged in'})
+    console.log('JKBJKBHJD');
+  }
+  const {user:_id} = jwt.verify(token, process.env.JWT_SECRET_USER)
+  if (!_id)
+  {
+    console.log('dsdsdsd');
+
+  return  res.json({'response':'User not verified'})
+  }
+const{oldPassword,password}=req.body
+console.log(req.body);
+console.log(password);
+changePassword(_id,password,oldPassword).then(response=>{
+
+
+  res.json(response)
+})
+})
+
+
+
+
+// ==================================================Change Password start=================================
+
+
 module.exports = router;

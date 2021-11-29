@@ -256,7 +256,6 @@ router.post('/category/add', async (req, res) => {
 
     try
     {
-        console.log(req.body);
         const { categoryName } = req.body
         const category=categoryName
 console.log(categoryName);
@@ -427,7 +426,6 @@ router.post('/category/sub/edit/', async (req, res) => {
      
     try {
         
-        console.log(req.body);
 const {_id,subCat,newsubCat} = req.body
 
         if (!_id || !subCat||!newsubCat)
@@ -476,7 +474,6 @@ router.post('/category/sub/delete', async (req, res) => {
         // db.categories.update({_id:ObjectId("6190fae0cbf384989504aaad")},{$pull:{subCat:null}})
 
         const response = await catModel.updateOne({ _id }, { $pull: { subCat } })
-        console.log(response);
         
     } catch (error) {
         console.log(error);
