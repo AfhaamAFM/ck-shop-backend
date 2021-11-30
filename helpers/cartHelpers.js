@@ -11,7 +11,6 @@ module.exports = {
     addToCart: (user, cartItem) => {
 
         return new Promise(async (resolve, reject) => {
-console.log('VANATHHH 3',user,cartItem);
             const { product, price, quantity, size } = cartItem
             const existCart = await cartModel.findOne({ user })
 

@@ -39,6 +39,44 @@ console.log(err);
 
 },
 
+editAddress:(_id,addressId,address)=>{
+
+    
+    return new Promise(async( resolve,reject)=>{
+    
+    const userExist =await userModel.findOne({_id})
+    
+    if(!userExist){
+    
+    
+        return resolve({response:'User not found'})
+    }
+    
+    
+    
+         userModel.updateOne({_id,'address._id':addressId}, { $set: { "address.$":address   } }).then(res=>{
+     return resolve(res.acknowledged);
+    
+         }).catch(err=>{
+    
+    console.log(err);
+    
+         })
+       
+        })
+    
+    
+    
+    
+    
+    },
+
+
+
+
+
+
+
 deleteAddress:(_id,addressId)=>{
 
 

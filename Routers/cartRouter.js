@@ -77,11 +77,9 @@ router.post('/add', (req, res) => {
           }
 
 
-console.log('VANATHHHHH',req.body);
 
 
         const {cartItem} = req.body
-        console.log('VANATHHH 2',cartItem);
         // const cartItem={product,size,price }
         addToCart(user, req.body).then(response => {
 

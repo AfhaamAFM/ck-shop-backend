@@ -3,7 +3,7 @@ const userModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const userHelpers=require('../helpers/userHelpers');
-const { addAddress, deleteAddress, editUser, changePassword } = require("../helpers/userHelpers");
+const { addAddress, deleteAddress, editUser, changePassword, editAddress } = require("../helpers/userHelpers");
 
 
 
@@ -212,7 +212,48 @@ res.json(response)
 
 // =========================user addresss add ===========end=================
 
+// ==========================user adress EDIT==========start=================
 
+
+router.post('/address/edit',(req,res)=>{
+
+  const token = req.cookies.userToken
+const address=req.body
+  if(!token){
+  
+    return res.json({'response':'User not logged in'})
+  }
+  const {user:_id} = jwt.verify(token, process.env.JWT_SECRET_USER)
+  if (!_id)
+  {
+  return  res.json({'response':'User not verified'})
+  }
+  
+
+const{addressId}=address
+  const {name,pincode,street,landmark,district,state,number,flatNo}=address
+
+
+  if(!name||!pincode||!street||!landmark||!district||!state||!number||!flatNo){
+
+    return  res.json({'response':'Fill all'})
+  }
+
+editAddress(_id,addressId,address).then((response)=>{
+
+res.json(response)
+
+}).catch((err)=>{
+
+
+  console.log('this is address add erre  '+err);
+})
+
+
+})
+
+
+// =========================user addresss EDIT ===========end=================
 
 // ======================DELETE ADDRESS START================================
 
@@ -222,7 +263,6 @@ router.get('/address/delete/:addressId',(req,res)=>{
 
   const token = req.cookies.userToken
 const addressId=req.params.addressId
-
   if(!token){
   
     return res.json({'response':'User not logged in'})
@@ -302,8 +342,7 @@ router.post('/changePassword',async (req,res)=>{
   return  res.json({'response':'User not verified'})
   }
 const{oldPassword,password}=req.body
-console.log(req.body);
-console.log(password);
+
 changePassword(_id,password,oldPassword).then(response=>{
 
 
