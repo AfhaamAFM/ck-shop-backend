@@ -48,6 +48,7 @@ app.use('/user', require('./Routers/userRouter'))
 app.use('/admin', require('./Routers/adminRouter'))
 app.use('/admin/product',require('./Routers/productRouters'))
 app.use('/user/cart/',require('./Routers/cartRouter'))
+app.use('/order/',require('./Routers/orderRouter'))
 
 app.get('/', (req, res) => {
     res.send('hello')
