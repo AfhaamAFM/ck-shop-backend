@@ -1,6 +1,7 @@
 const router = require("express").Router();
+const { response } = require("express");
 const jwt = require("jsonwebtoken");
-const { placeOrder, getOrders } = require("../helpers/orderHelpers");
+const { placeOrder, getOrders, getAllOrders, changeOrderStatus } = require("../helpers/orderHelpers");
 
 
 // ====================GET ORDER START================================
@@ -41,6 +42,35 @@ console.log('this is fetch cart error  '+error);
 })
 
 // ====================GET ORDER END=================================
+
+// Get all orders start
+
+router.get('/all',(req,res)=>{
+
+try {
+
+console.log('reccc');
+    getAllOrders().then(response=>{
+
+
+        res.json(response)
+    })
+    
+} catch (error) {
+
+    console.log('this is get all order error '+error);
+    
+}
+
+
+
+
+
+})
+
+
+
+// get all orders end
 
 
 //========================================= Place order start=====================
@@ -112,6 +142,33 @@ const orders= {amount,address,paymentMethod,orderStatus,orderItem}
     })
 
 // =========================place oerder end============================
+// Change order status start
+
+router.post('/changeStatus',(req,res)=>{
+
+try {
+const {user,orderId,orderStatus}=req.body
+
+
+changeOrderStatus(user,orderId,orderStatus).then(respone=>{
+
+res.json(response)
+
+
+})
+
+    
+} catch (error) {
+    
+
+    console.log('this is change order status errpr '+error);
+}
+
+
+
+})
+
+// change order status end
 
 
 

@@ -163,7 +163,7 @@ router.get('/get-user', async (req, res) => {
     {
 
 
-const pageSize=2
+const pageSize=7
 const page = Number(req.query.pageNumber)||1
 
 const keyword = req.query.keyword ?
