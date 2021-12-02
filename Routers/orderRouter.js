@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { response } = require("express");
 const jwt = require("jsonwebtoken");
-const { placeOrder, getOrders, getAllOrders, changeOrderStatus } = require("../helpers/orderHelpers");
+const { placeOrder, getOrders, getAllOrders, changeOrderStatus, userCancelOrder } = require("../helpers/orderHelpers");
 
 
 // ====================GET ORDER START================================
@@ -49,7 +49,7 @@ router.get('/all',(req,res)=>{
 
 try {
 
-console.log('reccc');
+
     getAllOrders().then(response=>{
 
 
@@ -102,12 +102,6 @@ const{amount,address,paymentMethod,orderStatus,cartItems}=req.body
 
 const {cartItem,cartProduct}=cartItems
 
-// console.log(cartItem);
-// console.log(cartProduct);
-    // placeOrder(user,req.body).then(response=>{
-
-    //     res.json(response)
-    // })
 let orderItem=[]
     let orderProduct={}
     cartItem.map((value, i) => {
@@ -147,6 +141,7 @@ const orders= {amount,address,paymentMethod,orderStatus,orderItem}
 router.post('/changeStatus',(req,res)=>{
 
 try {
+
 const {user,orderId,orderStatus}=req.body
 
 
@@ -170,7 +165,44 @@ res.json(response)
 
 // change order status end
 
+// user cancel order start
 
+router.get('/user/cancelOrder/:orderId',(req,res)=>{
+
+try {
+const orderId=req.params.orderId
+const token =req.cookies.userToken
+if(!token){
+
+return res.json({response:'user not logged in'})
+
+
+}
+const {user} =jwt.verify(token,process.env.JWT_SECRET_USER)
+
+if(!user){
+
+    return res.json({response:'user not verified'})
+}    
+
+userCancelOrder(user,orderId).then(response=>{
+
+
+    res.json(response)
+
+})
+} catch (error) {
+    
+
+console.error('this is user cancel order error '+ error);
+
+}
+
+
+
+})
+
+// user cancel order end
 
 
 

@@ -1,14 +1,13 @@
 const orderModel =require('../models/OrderModel')
 const cartModel=require('../models/CartModel')
 const userModel=require('../models/userModel')
-
+const offerModel =require('../models/offerModel')
 
 module.exports={
 
 
 placeOrder:(user,orders)=>{
  return new Promise (async(resolve,reject)=>{
-
 const isOrder=await orderModel.findOne({user})
 const user1 =await userModel.findOne({_id:user})
 const {email}=user1
@@ -87,7 +86,31 @@ return resolve(setorderStatus.acknowledged);
 
 
 
+},
+
+// use cancel order start 
+
+userCancelOrder:(user,orderId)=>{
+return new Promise(async(resolve,reject)=>{
+console.log(orderId);
+console.log(user);
+const cancelOrder = await orderModel.updateOne({user,'orders._Id':orderId},{$set:{'orders.$.orderStatus':'canceled'}})
+return resolve(cancelOrder.acknowledged)
+
+
+
+})
+
+
 }
+
+// user cancel order end
+
+
+
+
+
+
 
 
 

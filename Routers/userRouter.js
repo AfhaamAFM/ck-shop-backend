@@ -350,10 +350,22 @@ changePassword(_id,password,oldPassword).then(response=>{
 })
 })
 
-
-
-
 // ==================================================Change Password start=================================
+
+// ======================change profile image============================start====================
+
+router.post('/imageUpload',(req,res)=>{
+console.log(req.body);
+
+
+})
+
+
+
+
+// ==============================change profileimage end================================
+
+
 
 
 module.exports = router;

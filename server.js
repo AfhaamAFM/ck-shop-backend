@@ -11,12 +11,13 @@ const fileupload = require('express-fileupload');
 dotenv.config()
 
 
-app.use(express.json({}))
+app.use(express.json({limit:'50mb'}))
 // app.use(fileupload());
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true,limit:'50mb' }))
 mongoose.connect(process.env.MDB_CONNECT, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    
 
 }, (err) => {
     if (err) return console.log(err);
@@ -49,6 +50,7 @@ app.use('/admin', require('./Routers/adminRouter'))
 app.use('/admin/product',require('./Routers/productRouters'))
 app.use('/user/cart/',require('./Routers/cartRouter'))
 app.use('/order/',require('./Routers/orderRouter'))
+app.use('/offer',require('./Routers/offerRouter'))
 
 app.get('/', (req, res) => {
     res.send('hello')

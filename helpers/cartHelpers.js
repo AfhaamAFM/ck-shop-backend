@@ -141,15 +141,6 @@ resolve(cartItem[0]);
 
 
 
-  
-
-
-
-
-
-
-
-
 
 
 

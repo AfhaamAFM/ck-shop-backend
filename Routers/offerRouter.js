@@ -1,0 +1,54 @@
+const { addOffer, fetchOffer } = require('../helpers/offerHelpers')
+
+const router =require('express').Router()
+
+
+router.get('/',(req,res)=>{
+
+try {
+    
+fetchOffer().then(response=>{
+res.json(response)
+
+
+}).catch(err=>{
+
+
+    console.error('This is get all offers error  '+err);
+
+
+})
+
+
+} catch (error) {
+    
+    console.error('This is get all offers error  '+error);
+}
+
+})
+
+// add product offer router start
+
+router.post('/addOffer',(req,res)=>{
+try {
+
+const {offerName,expiryDate,percentage}=req.body
+addOffer(offerName,expiryDate,percentage).then(response=>{
+
+
+    res.json(response)
+})
+
+    
+} catch (error) {
+    
+    console.error('this is add product offer error   ' +error);
+}
+
+})
+
+
+
+
+
+module.exports =router
