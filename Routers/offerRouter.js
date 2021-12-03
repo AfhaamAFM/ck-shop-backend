@@ -54,13 +54,10 @@ router.post('/applyProductOffer',(req,res)=>{
 
 try {
 
-const{productId,offer}=req.body
+const{productId,offerId}=req.body
 
 
-console.log('product  '+ productId);
-console.log('offer  ', offer);
-
-applyProductOffer(productId,offer).then(response=>{
+applyProductOffer(productId,offerId).then(response=>{
 
 res.json(response)
 
