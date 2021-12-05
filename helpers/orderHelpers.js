@@ -16,11 +16,10 @@ if(isOrder){
 
 
 const placeOrder= await orderModel.updateOne({user},{$addToSet:{orders}})
-cartModel.findOneAndUpdate({user},{$set:{cartItem:[]}}).then(res=>{
     
 return resolve(orders.orderId)
 
-})
+
 
 
 
@@ -103,11 +102,43 @@ return resolve(cancelOrder.acknowledged)
 })
 
 
-}
+},
 
 // user cancel order end
+// pay for order start
 
+payForOrder:(user,orderId,paymentId,paymentMethod)=>{
+    return new Promise(async (resolve,reject)=>{
+      
+        const isOrder =await orderModel.find({user})
 
+        if(!isOrder){
+            return resolve ({response:'use order not found'})
+        }
+    const paymentResult ={
+
+        payId:paymentId,
+        payed_Date:new Date(),
+        status:'paid'
+
+    }
+
+        orderModel.updateOne({user,'orders.orderId':orderId},{$set:{
+
+            'orders.$.isPaid':true,
+            'orders.$.paymentMethod':paymentMethod,
+            'orders.$.paymentResult':paymentResult
+
+            
+        }}).then(res=>{
+            cartModel.findOneAndUpdate({user},{$set:{cartItem:[]}}).then(res=>{
+
+            return resolve(true)
+            })
+        })
+    
+    })
+}
 
 
 

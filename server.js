@@ -56,6 +56,8 @@ app.get('/', (req, res) => {
     res.send('hello')
 })
  app.get('/config/paypal',(req,res)=>res.send(process.env.PAYPAL_CLIENT_ID))
+ app.get('/config/razor',(req,res)=>res.send(process.env.RAZOR_CLIENT_ID))
+
 
 
 const PORT = process.env.PORT || 5000;
