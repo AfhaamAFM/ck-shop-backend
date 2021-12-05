@@ -1,4 +1,4 @@
-const { addOffer, fetchOffer, applyProductOffer } = require('../helpers/offerHelpers')
+const { addOffer, fetchOffer, applyProductOffer, removeOffer } = require('../helpers/offerHelpers')
 
 const router =require('express').Router()
 
@@ -73,6 +73,33 @@ res.json(response)
 
 
 })
+
+// remove offer from product start
+router.get('/removeOffer/:id',(req,res)=>{
+
+try {
+    console.log('reeeee');
+    
+    const id = req.params.id
+
+    removeOffer(id).then(response=>{
+
+res.json(response)
+
+    })
+
+
+} catch (error) {
+    
+    console.error('This is delte offer error  '+error);
+}
+
+
+})
+
+// remove offer from product end
+
+
 
 
 

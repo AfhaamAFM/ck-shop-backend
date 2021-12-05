@@ -16,8 +16,9 @@ if(isOrder){
 
 
 const placeOrder= await orderModel.updateOne({user},{$addToSet:{orders}})
-cartModel.updateOne({user},{$set:{cartItem:[]}}).then(res=>{
-return resolve(placeOrder)
+cartModel.findOneAndUpdate({user},{$set:{cartItem:[]}}).then(res=>{
+    
+return resolve(orders.orderId)
 
 })
 

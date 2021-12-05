@@ -7,7 +7,7 @@ const cors = require('cors')
 const { urlencoded } = require('express')
 const app = express()
 const fileupload = require('express-fileupload');
-
+const cloudinary =require('./Routers/utils/cloudinary')
 dotenv.config()
 
 
@@ -55,7 +55,7 @@ app.use('/offer',require('./Routers/offerRouter'))
 app.get('/', (req, res) => {
     res.send('hello')
 })
-
+ app.get('/config/paypal',(req,res)=>res.send(process.env.PAYPAL_CLIENT_ID))
 
 
 const PORT = process.env.PORT || 5000;

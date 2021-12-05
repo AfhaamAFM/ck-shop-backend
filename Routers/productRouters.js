@@ -78,6 +78,7 @@ router.post("/addImage", upload.array("image"), async (req, res) => {
 
     } catch (e) {
         console.log('cloudinary error' + e.message);
+        res.json({error:e})
     }
 
     //console.log(files);

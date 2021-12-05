@@ -2,8 +2,10 @@ const router = require("express").Router();
 const { response } = require("express");
 const jwt = require("jsonwebtoken");
 const { placeOrder, getOrders, getAllOrders, changeOrderStatus, userCancelOrder } = require("../helpers/orderHelpers");
-
-
+const Mongoose = require('mongoose')
+const ObjectId = Mongoose.Types.ObjectId
+const Razorpay = require('razorpay')
+const shortid=require('shortid')
 // ====================GET ORDER START================================
 
 router.get('/',(req,res)=>{
@@ -118,8 +120,8 @@ orderProduct.image=cartProduct[index].imageUrl[0].img
 
 orderItem.push(orderProduct)
     })
-
-const orders= {amount,address,paymentMethod,orderStatus,orderItem}
+const orderId=new ObjectId()
+const orders= {amount,address,paymentMethod,orderStatus,orderItem,orderId}
 
     placeOrder(user,orders).then(response=>{
 
@@ -204,10 +206,37 @@ console.error('this is user cancel order error '+ error);
 
 // user cancel order end
 
+//@desc : pay with paypal
+//@route : /order/paypal/payAmount
+//@access : private
+
+//@desc : pay with razorapy
+//@route : /order/razorpay/payAmount
+//@access : private
+var razorpay = new Razorpay({
+    key_id: 'rzp_test_ZanWOoH710Fanr',
+    key_secret: '5NghM8DqAGrhnAXspLtqV4yc',
+  });
+
+router.get('/razorpay/payAmount',async (req,res)=>{
+console.log('reached');
+const options ={
+    amount: 50000,
+    currency: "INR",
+    receipt: shortid.generate(),
 
 
+}
+const response = await razorpay.orders.create(options)
+console.log(response)
+res.json({
+    id:response.id,
+    currency:response.currency,
+    amount:response.currency
+})
 
 
+})
 
 
 module.exports=router

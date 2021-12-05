@@ -81,11 +81,11 @@ return new Promise(async (resolve, reject) => {
 
                 }
 
-                const existOffer = await productModel.findOne({ 'offer._id': offerId })
-                if (existOffer) {
+                // const existOffer = await productModel.findOne({ _id,'offer._id': offerId })
+                // if (existOffer) {
 
-                    return resolve({ warning: `${offerName} offer  is already applied` })
-                }
+                //     return resolve({ warning: `${offerName} offer  is already applied` })
+                // }
 
 
                 if (oldPercentage > percentage) {
@@ -138,10 +138,18 @@ return new Promise(async (resolve, reject) => {
         })
 
 
-    }
+    },
 
     // Apply product offer end
+removeOffer:(_id)=>{
+return new Promise(async(resolve,reject)=>{
+    const removeOffer = await productModel.updateOne({_id},{$set:{isOffer:false,offer:''}})
+    resolve(true)
+        
 
+})
+ 
+}
 
 
 

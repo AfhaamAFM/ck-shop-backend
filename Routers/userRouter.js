@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const userHelpers=require('../helpers/userHelpers');
 const { addAddress, deleteAddress, editUser, changePassword, editAddress } = require("../helpers/userHelpers");
-
+const {cloudinary} =require('./utils/cloudinary')
 
 
 
@@ -354,8 +354,26 @@ changePassword(_id,password,oldPassword).then(response=>{
 
 // ======================change profile image============================start====================
 
-router.post('/imageUpload',(req,res)=>{
-console.log(req.body);
+router.post('/imageUpload',async (req,res)=>{
+
+  try {
+
+    const {image} =req.body
+
+    // console.log(req.body);
+
+    const uploadResponse = await cloudinary.uploader.upload(image, {
+      upload_preset: 'fnpbm7gw'
+    })
+console.log(uploadResponse);
+
+    
+  } catch (error) {
+    
+    console.error('This is uplosd error '+error);
+  }
+
+
 
 
 })
