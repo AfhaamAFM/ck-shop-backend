@@ -19,6 +19,7 @@
   "homepage": "https://github.com/AfhaamAFM/ck-shop-backend/readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "chalk": "^4.1.2",
     "cloudinary": "^1.27.1",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",

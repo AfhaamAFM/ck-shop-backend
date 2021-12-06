@@ -107,7 +107,7 @@ return resolve(cancelOrder.acknowledged)
 // user cancel order end
 // pay for order start
 
-payForOrder:(user,orderId,paymentId,paymentMethod)=>{
+payForOrder:(user,orderId,paymentId,paymentMethod,orderStatus)=>{
     return new Promise(async (resolve,reject)=>{
       
         const isOrder =await orderModel.find({user})
@@ -127,6 +127,7 @@ payForOrder:(user,orderId,paymentId,paymentMethod)=>{
 
             'orders.$.isPaid':true,
             'orders.$.paymentMethod':paymentMethod,
+            'orders.$.orderStatus':orderStatus,
             'orders.$.paymentResult':paymentResult
 
             
@@ -138,6 +139,33 @@ payForOrder:(user,orderId,paymentId,paymentMethod)=>{
         })
     
     })
+},
+placeCashOnDelivary:(user,orderId,paymentMethod,orderStatus)=>{
+
+return new Promise(async(resolve,reject)=>{
+
+
+    const isOrder =await orderModel.find({user})
+
+    if(!isOrder){
+        return resolve ({response:'use order not found'})
+    }
+
+    orderModel.updateOne({user,'orders.orderId':orderId},{$set:{
+
+      
+        'orders.$.paymentMethod':paymentMethod,
+        'orders.$.orderStatus':orderStatus,
+        
+    }}).then(res=>{
+        cartModel.findOneAndUpdate({user},{$set:{cartItem:[]}}).then(res=>{
+
+        return resolve(true)
+        })
+    })
+
+})
+
 }
 
 

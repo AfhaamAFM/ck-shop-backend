@@ -8,8 +8,9 @@ const { urlencoded } = require('express')
 const app = express()
 const fileupload = require('express-fileupload');
 const cloudinary =require('./Routers/utils/cloudinary')
-dotenv.config()
+const chalk =require('chalk')
 
+dotenv.config()
 
 app.use(express.json({limit:'50mb'}))
 // app.use(fileupload());
@@ -62,5 +63,5 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`server start at port ${PORT}`);
+    console.log(chalk.yellowBright(`server start at port ${PORT}`));
 })

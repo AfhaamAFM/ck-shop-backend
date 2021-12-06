@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { response } = require("express");
 const jwt = require("jsonwebtoken");
-const { placeOrder, getOrders, getAllOrders, changeOrderStatus, userCancelOrder, payForOrder } = require("../helpers/orderHelpers");
+const { placeOrder, getOrders, getAllOrders, changeOrderStatus, userCancelOrder, payForOrder, placeCashOnDelivary } = require("../helpers/orderHelpers");
 const Mongoose = require('mongoose')
 const ObjectId = Mongoose.Types.ObjectId
 const Razorpay = require('razorpay')
@@ -261,8 +261,8 @@ router.post('/:orderId/pay-amount', (req, res) => {
             }
 
 
-const {paymentId,paymentMethod}=req.body
-            payForOrder(user,orderId,paymentId,paymentMethod).then(response=>{
+const {paymentId,paymentMethod,orderStatus}=req.body
+            payForOrder(user,orderId,paymentId,paymentMethod,orderStatus).then(response=>{
 
                res.json(response)
             })
@@ -272,6 +272,52 @@ const {paymentId,paymentMethod}=req.body
             console.error('this the order payment error + ' + error);
         }
     })
+
+//@desc : Place order with cash on delivary
+//@route : /order/placeOrder/cod
+//@access : private
+router.post('/placeOrder/:orderId/cod',(req,res)=>{
+
+
+    
+try {
+    
+
+  
+    const orderId = req.params.orderId
+    const token = req.cookies.userToken
+    if (!token) {
+
+        return res.json({ response: 'user not logged in' })
+
+
+    }
+    const { user } = jwt.verify(token, process.env.JWT_SECRET_USER)
+
+    if (!user) {
+
+        return res.json({ response: 'user not verified' })
+    }
+
+
+const {paymentMethod,orderStatus}=req.body
+
+
+placeCashOnDelivary(user,orderId,paymentMethod,orderStatus).then(samaanam=>{
+
+
+res.json(samaanam)
+
+})
+
+} catch (error) {
+
+    console.error('This is a error from place on cod   ' + error );
+    
+}
+
+
+})
 
 
 module.exports = router
