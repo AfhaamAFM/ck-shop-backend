@@ -46,6 +46,7 @@ router.get('/delete/:id', (req, res) => {
 // 
 router.post("/uploadImage", async (req, res) => {
     try {
+
         const token = req.cookies.userToken
         if (!token) {
 
@@ -60,8 +61,10 @@ router.post("/uploadImage", async (req, res) => {
             return res.json({ response: 'user not verified' })
         }
         const { image: imageHere } = req.body
+        
+        const {public_id} =req.query;
 
-        uploadImage(imageHere).then(response => {
+        uploadImage(imageHere,public_id).then(response => {
 
             res.json(response)
         })
@@ -78,6 +81,8 @@ router.post("/uploadImage", async (req, res) => {
 
 
 })
+
+
 
 // add image end
 // add product start

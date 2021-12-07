@@ -202,12 +202,14 @@ module.exports = {
 
         })
     },
-    uploadImage: (imageHere) => {
+    uploadImage: (imageHere,public_id) => {
 
         return new Promise(async (resolve, reject) => {
             console.log('reached here');
-
-
+            if(public_id){
+            await  cloudinary.uploader.destroy(public_id, function(error,result) {
+                console.log(result, error) });  
+            }
             cloudinary.uploader.upload(imageHere, {
                 upload_preset: 'fnpbm7gw'
             }).then(response => {
