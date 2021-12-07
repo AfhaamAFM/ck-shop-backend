@@ -1,4 +1,4 @@
-
+const { cloudinary } = require('../Routers/utils/cloudinary')
 
 const productModel = require('../models/productModel')
 
@@ -12,7 +12,6 @@ module.exports = {
 
 
             const { name, category, subCat, price, description, small, medium, large, imageUrl } = product
-
             if (!name || !price || !category || !subCat) {
                 return resolve({ response: 'Please fill all' })
             }
@@ -162,12 +161,12 @@ module.exports = {
     },
 
 
-    filterProductbySubCategory: (category,subCat) => {
+    filterProductbySubCategory: (category, subCat) => {
 
         return new Promise(async (resolve, reject) => {
 
 
-            const existCat = await productModel.findOne({ category,subCat })
+            const existCat = await productModel.findOne({ category, subCat })
 
             if (!existCat) {
                 console.log('dasd', existCat);
@@ -175,7 +174,7 @@ module.exports = {
                 return resolve({ response: `No item found in ${category}'s  ${subCat}' ` })
             }
 
-            productModel.find({ category,subCat }).then((res) => {
+            productModel.find({ category, subCat }).then((res) => {
 
                 resolve(res)
 
@@ -184,30 +183,51 @@ module.exports = {
             })
 
         })
- },
+    },
 
-//  Search product start
+    //  Search product start
 
-searchProduct:(word)=>{
+    searchProduct: (word) => {
 
-return new Promise((resolve,reject)=>{
+        return new Promise((resolve, reject) => {
 
-productModel.find({name: {$regex:word,$options: 'i'}}).then(res=>{
-console.log(res);
-resolve(res)
-
-
-})
+            productModel.find({ name: { $regex: word, $options: 'i' } }).then(res => {
+                console.log(res);
+                resolve(res)
 
 
-
-})
+            })
 
 
 
-}
+        })
+    },
+    uploadImage: (imageHere) => {
+
+        return new Promise(async (resolve, reject) => {
+            console.log('reached here');
 
 
-// Search product end
+            cloudinary.uploader.upload(imageHere, {
+                upload_preset: 'fnpbm7gw'
+            }).then(response => {
+
+                const { public_id, url:img } = response
+
+                const image = { public_id, img }
+                resolve(image)
+
+            }).catch(err => {
+                console.log('this is the error form product helpers eror clodinfnaty' + err);
+
+
+            })
+
+
+        })
+    }
+
+
+    // Search product end
 
 }

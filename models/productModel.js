@@ -8,7 +8,10 @@ const productSchema = new mongoose.Schema({
     description: { type: String, required: true },
     discountPrice: { type: Number },
     offerPrice: { type: Number },
-    imageUrl: [{ img: { type: String } }],
+    imageUrl: [{
+        img: { type: String },
+        public_id: { type: String }
+    }],
     color: { type: String },
     quantity: { type: Number, required: true },
     small: { type: Number },
