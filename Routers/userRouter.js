@@ -11,8 +11,6 @@ const {cloudinary} =require('./utils/cloudinary')
 
 
 
-
-
 // root start
 router.get("/", (req, res) => {
   res.send("hello user");
@@ -358,16 +356,41 @@ router.post('/imageUpload',async (req,res)=>{
 
   try {
 
-    const {image} =req.body
+    const token = req.cookies.userToken
+    if (!token) {
+
+        return res.json({ response: 'user not logged in' })
+
+
+    }
+    const { user:_id } = jwt.verify(token, process.env.JWT_SECRET_USER)
+
+    if (!_id) {
+
+        return res.json({ response: 'user not verified' })
+    }
+    const {image:imageHere,oldImage} =req.body
 
     // console.log(req.body);
 
-    const uploadResponse = await cloudinary.uploader.upload(image, {
+
+  await  cloudinary.uploader.destroy(oldImage.public_id, function(error,result) {
+    console.log(result, error) });  
+  
+
+
+    const uploadResponse = await cloudinary.uploader.upload(imageHere, {
       upload_preset: 'fnpbm7gw'
     })
-console.log(uploadResponse);
 
-    
+const {public_id,url}=uploadResponse
+
+const image = {public_id,url}
+    userModel.updateOne({_id},{$set:{image}}).then(response=>{
+
+      res.json(true)
+    })
+
   } catch (error) {
     
     console.error('This is uplosd error '+error);
@@ -383,7 +406,18 @@ console.log(uploadResponse);
 
 // ==============================change profileimage end================================
 
+// delete image 
+router.get('/deleteImage',async (req,res)=>{
 
+try {
+await  cloudinary.uploader.destroy('bq36ctbntgwhrckgmtsq', function(error,result) {
+    console.log(result, error) });  
+} catch (error) {
+  console.error('this is delte image error  '+error);
+}
+
+
+}) 
 
 
 module.exports = router;

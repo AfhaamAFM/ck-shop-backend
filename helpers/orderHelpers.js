@@ -115,10 +115,11 @@ payForOrder:(user,orderId,paymentId,paymentMethod,orderStatus)=>{
         if(!isOrder){
             return resolve ({response:'use order not found'})
         }
+        const date =new Date()
     const paymentResult ={
 
         payId:paymentId,
-        payed_Date:new Date(),
+        payed_Date:date,
         status:'paid'
 
     }
@@ -163,6 +164,35 @@ return new Promise(async(resolve,reject)=>{
         return resolve(true)
         })
     })
+
+})
+
+},
+// count data for dashboard
+
+getCountData:()=>{
+return new Promise(async(resolve,reject)=>{
+
+  const orderCount= await  orderModel.aggregate([
+        {$unwind:'$orders'},
+        {$match:{'orders.orderStatus':'ordered'}},
+        {$count:'totalOrders'}
+        ])
+const totalSales=orderModel.aggregate([
+            {$unwind:'$orders'},
+            {$match:{'orders.orderStatus':'delivered'}},
+             {
+                   "$group": { "_id": "$orders.orderId", 
+                            "Total sum": {"$sum":'$orders.amount'} }
+                 },
+                 {$project:{_id:0}}
+            ])
+
+        resolve({
+
+            orderCount,
+            totalSales
+        })
 
 })
 

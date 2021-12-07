@@ -8,6 +8,7 @@ const {cloudinary} =require('./utils/cloudinary')
 const uploads=require("./utils/multer")
 const { route } = require('./userRouter')
 const { editProductCat } = require('../helpers/ProductHelpers')
+const { getCountData } = require('../helpers/orderHelpers')
 
 
 
@@ -483,17 +484,30 @@ router.post('/category/sub/delete', async (req, res) => {
 
 
 
-// -------------------------delete subcategory end-----------------------------------------
-// ====================SUB-CATEGORY MANAGMENT END==============================================
-
-
-
-
+// -------------------------delete subcategory end-------------------------------------->
+// ====================SUB-CATEGORY MANAGMENT END========================================
 // ===================CATEGORY MANAGMENT END=============================================
-// ===================PRODUCT MANAGMENT START===========================================
-//============================PROFUCT MANAGMNET END===================================================
 
 
 
+// Dahboard count data start
+
+router.get('/dashboard-details',(req,res)=>{
+
+try {
+    getCountData().then(response=>{
+
+
+        res.json(response)
+    })
+
+
+} catch (error) {
+
+    console.error('This is the dshbiard count  '+error);
+    
+}
+
+})
 
 module.exports = router

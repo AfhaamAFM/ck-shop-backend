@@ -7,7 +7,7 @@ const orderSchema = new mongoose.Schema({
     orders: [{
         orderId: { type: mongoose.Schema.Types.ObjectId, required: true },
         orderItem: { type: Array, required: true },
-        orderStatus: { type: String, required: true },
+        orderStatus: { type: String },
         paymentMethod: { type: String },
         amount: { type: Number, required: true },
         address: { type: Object, required: true },
@@ -15,7 +15,7 @@ const orderSchema = new mongoose.Schema({
         paymentResult: {
             payId: { type: String ,default:null},
             status: { type: String ,default:'not paid'},
-            payed_date: { type: Date ,default:null},
+            payed_Date: { type: Date ,default:null},
         }
 
     }]

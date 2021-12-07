@@ -16,7 +16,9 @@ const userSchema = new mongoose.Schema({
         district: { type: String, required: true },
         state: { type: String, required: true },
         landmark:{type:String,required:true}
-    }]
+    }],
+  image:{public_id:{type:String},
+url:{type:String}}  
 
 })
 const newUser = mongoose.model("user", userSchema)
