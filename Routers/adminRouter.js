@@ -8,7 +8,7 @@ const {cloudinary} =require('./utils/cloudinary')
 const uploads=require("./utils/multer")
 const { route } = require('./userRouter')
 const { editProductCat } = require('../helpers/ProductHelpers')
-const { getCountData } = require('../helpers/orderHelpers')
+const { getCountData, getSalesRangeReport, getReportData } = require('../helpers/orderHelpers')
 
 
 
@@ -509,5 +509,58 @@ try {
 }
 
 })
+
+
+router.post('/sales-report/range',(req,res)=>{
+
+
+try {
+
+
+    const{fromDate,toDate}=req.body
+
+    if(!fromDate||!toDate){
+        return res.json({response:'fill all'})
+    }
+     
+
+   getSalesRangeReport(fromDate,toDate).then(response=>{
+
+    res.json(response)
+   }) 
+    
+} catch (error) {
+    console.error('this is the sales report range error    '+error);
+}
+
+
+
+
+})
+
+
+// get data as yearly monthly date
+
+router.get('/sales-report/type/:type',(req,res)=>{
+
+
+    try {
+    
+    const type = req.params.type    
+      
+         
+    getReportData(type).then(response=>{
+    
+        res.json(response)
+       }) 
+        
+    } catch (error) {
+        console.error('this is the sales report range error    '+error);
+    }
+    
+    
+    
+    
+    })
 
 module.exports = router
