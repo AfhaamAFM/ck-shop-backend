@@ -32,6 +32,27 @@ router.post('/add', (req, res) => {
 // add product end
 // delete product start
 
+//@desc : Edit proudct
+//@route : /admin/product/edit
+//@access : private
+
+router.post('/edit',(req,res)=>{
+
+try {
+    editProduct(req.body).then(response => {
+        res.json(response)
+    })
+    
+} catch (error) {
+    
+console.error('This is the product edit error  '+ error)
+}
+
+
+})
+
+
+
 router.get('/delete/:id', (req, res) => {
     console.log('reached delte');
     deleteProduct(req.params.id).then(response => {

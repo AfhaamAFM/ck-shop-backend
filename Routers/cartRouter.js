@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { addToCart, deleteCart, getCartItems } = require("../helpers/cartHelpers");
+const { addToCart, deleteCart, getCartItems, quantityHandler } = require("../helpers/cartHelpers");
 const jwt = require("jsonwebtoken");
 
 
@@ -161,13 +161,43 @@ res.json(response)
 
 
 
-// ==================================================PlaceOrder start==================================
+// ==================================================Quantity Handler start==================================
+
+router.get('/changeQuantity/:cartId/:value',(req,res)=>{
+
+try {
+
+  const token = req.cookies.userToken
+          if(!token){
+          
+            return res.json({'response':'User not logged in'})
+            console.log('JKBJKBHJD');
+          }
+          const {user} = jwt.verify(token, process.env.JWT_SECRET_USER)
+          if (!user)
+          {
+            console.log('dsdsdsd');
+
+          return  res.json({'response':'User not verified'})
+          }
+  const {cartId,value}=req.params
+  console.log(cartId,value);
+  
+  quantityHandler(user,cartId,value).then(response=>{
+
+res.json(response)
+
+  })
+} catch (error) {
+  console.error('this is the error from changeQuantiy  '+error);
+}
+
+
+})
 
 
 
-
-
-// ==================================================Place order end==================================
+// =================================================Quantity Handler end==================================
 
 
 

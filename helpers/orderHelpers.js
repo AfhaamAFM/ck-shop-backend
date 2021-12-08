@@ -231,21 +231,22 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let report = await orderModel.aggregate(
                 [
-                    {
-                        $match: {
-                            "orders.paymentResult.payed_Date" : { $gte: new Date(new Date() - numberOfDays * 60 * 60 * 24 * 1000) }
-                        }
-                    },
+
                     {
                         $unwind: '$orders'
                     },
-                    { $project: { email: 1, 'orders.orderId': 1, 'orders.amount': 1, 'orders.orderItem': 1, 'orders.paymentResult': 1 } },
+
+                    { $match: { $and: [{"orders.paymentResult.payed_Date" : { $gte: new Date(new Date() - numberOfDays * 60 * 60 * 24 * 1000) }}, { 'orders.orderStatus': 'delivered' }, { 'amount': { $ne: 0 } }] } },
+                 
+                    { $project: { email: 1, 'orders.orderId': 1, 'orders.amount': 1, 'orders.orderItem': 1, 'orders.paymentResult': 1,'orders.paymentMethod': 1
+                } },
  
                     {
                         $sort: { date: -1 }
                     }
                 ]
             )
+            console.log('reching')
             resolve(report)
         })
     },

@@ -545,7 +545,6 @@ router.get('/sales-report/type/:type',(req,res)=>{
 
 
     try {
-    
     const type = req.params.type    
       
          

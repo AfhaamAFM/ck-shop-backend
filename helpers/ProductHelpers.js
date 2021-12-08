@@ -83,7 +83,7 @@ module.exports = {
 
         return new Promise(async (resolve, reject) => {
 
-
+console.log('Reached')
             const { name, category, subCat, price, description, small, medium, large, imageUrl, _id } = product
 
             if (!name || !price || !category || !subCat) {
@@ -91,14 +91,10 @@ module.exports = {
             }
             // console.log(product)
 
-            const existProduct = await productModel.findOne({ name })
-
-            if (existProduct) {
-                return resolve({ response: 'Product already exist' })
-            }
+       
             let quantity = parseInt(small) + parseInt(medium) + parseInt(large)
 
-
+console.log(_id);
             const data = await productModel.updateOne({ _id }, {
                 $set: {
                     name, category, subCat, price, description, small, medium, large, imageUrl, quantity
@@ -123,9 +119,6 @@ module.exports = {
 
                 resolve(true)
             })
-
-
-
 
 
         })

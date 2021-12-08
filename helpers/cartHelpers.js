@@ -132,6 +132,22 @@ resolve(cartItem[0]);
 
     })
 
+},
+//quantity handler
+
+quantityHandler:(user,cartId,value)=>{
+
+return new Promise((resolve,reject)=>{
+
+cartModel.updateOne({user,'cartItem._id':cartId},{$inc: {'cartItem.$.quantity':value}}).then(res=>{
+
+
+return resolve(true)
+})
+
+
+})
+
 }
 
 
