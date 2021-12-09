@@ -5,7 +5,6 @@ const orderSchema = new mongoose.Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
     email: { type: String, required: true },
     orders: [{
-        orderId: { type: mongoose.Schema.Types.ObjectId, required: true },
         orderItem: { type: Array, required: true },
         orderStatus: { type: String },
         paymentMethod: { type: String },

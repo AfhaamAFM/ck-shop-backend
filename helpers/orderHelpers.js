@@ -16,12 +16,11 @@ module.exports = {
 
 
                 const placeOrder = await orderModel.updateOne({ user }, { $addToSet: { orders } })
+                cartModel.findOneAndUpdate({ user }, { $set: { cartItem: [] } }).then(res => {
 
-                return resolve(orders.orderId)
-
-
-
-
+                    return resolve(true)
+                })
+               
 
             } else {
 
@@ -34,7 +33,7 @@ module.exports = {
                     return resolve(savedOrder)
 
                 })
-                return resolve({ 'response': 'Order Placed' })
+                return resolve(true)
 
 
             }
@@ -50,8 +49,8 @@ module.exports = {
     getOrders: (user) => {
 
         return new Promise(async (resolve, reject) => {
-
-            const order = await orderModel.findOne({ user })
+        //   await orderModel.updateOne({user},{$pull:{"orders":{'orders.orderStatus': null}}})
+            const order = await orderModel.findOne({user})
             return resolve(order)
 
         })
@@ -64,6 +63,7 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
 
             const allOrders = await orderModel.aggregate([
+                {$match: { 'orders.orderStatus':{ $ne: ''}}},
 
                 { $unwind: '$orders' }
             ])

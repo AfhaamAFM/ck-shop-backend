@@ -98,7 +98,7 @@ router.post('/user/placeOrder', (req, res) => {
 
 
 
-        const { amount, address, paymentMethod, orderStatus, cartItems } = req.body
+        const { amount, address, paymentMethod, orderStatus, cartItems,paymentId } = req.body
 
         const { cartItem, cartProduct } = cartItems
 
@@ -118,8 +118,17 @@ router.post('/user/placeOrder', (req, res) => {
 
             orderItem.push(orderProduct)
         })
-        const orderId = new ObjectId()
-        const orders = { amount, address, paymentMethod, orderStatus, orderItem, orderId }
+
+        const date = new Date()
+        const paymentResult = {
+
+            payId: paymentId,
+            payed_Date: date,
+            status: 'paid'
+
+        }
+
+        const orders = { amount, address, paymentMethod, orderStatus, orderItem,paymentResult,isPaid:true}
 
         placeOrder(user, orders).then(response => {
 
@@ -214,10 +223,11 @@ var razorpay = new Razorpay({
     key_secret: '5NghM8DqAGrhnAXspLtqV4yc',
 });
 
-router.get('/razorpay/payAmount', async (req, res) => {
+router.get('/razorpay/payAmount/:amount', async (req, res) => {
+    const amount =req.params.amount
     console.log('reached');
     const options = {
-        amount: 50000,
+        amount: 767,
         currency: "INR",
         receipt: shortid.generate(),
 
@@ -239,12 +249,12 @@ router.get('/razorpay/payAmount', async (req, res) => {
 //@access : private
 
 
-router.post('/:orderId/pay-amount', (req, res) => {
+router.post('/pay-amount', (req, res) => {
 
     try {
 
 
-  
+  console.log('IVIDE YETHIIII');
             const orderId = req.params.orderId
             const token = req.cookies.userToken
             if (!token) {
