@@ -509,7 +509,7 @@ try {
 }
 
 })
-
+// dashboard data end
 
 router.post('/sales-report/range',(req,res)=>{
 

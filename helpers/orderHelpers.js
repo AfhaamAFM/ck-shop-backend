@@ -66,7 +66,10 @@ module.exports = {
             const allOrders = await orderModel.aggregate([
                 { $match: { 'orders.orderStatus': { $ne: '' } } },
 
-                { $unwind: '$orders' }
+                { $unwind: '$orders' },
+               {$sort: {
+                    "orders.paymentResult.payed_Date": -1
+                  }}
             ])
 
             resolve(allOrders)
@@ -144,7 +147,7 @@ module.exports = {
 
         })
     },
-    placeCashOnDelivary: (user, orderId, paymentMethod, orderStatus) => {
+    placeCashOnDelivary: (user, orders) => {
 
         return new Promise(async (resolve, reject) => {
 
@@ -155,15 +158,8 @@ module.exports = {
                 return resolve({ response: 'use order not found' })
             }
 
-            orderModel.updateOne({ user, 'orders.orderId': orderId }, {
-                $set: {
-
-
-                    'orders.$.paymentMethod': paymentMethod,
-                    'orders.$.orderStatus': orderStatus,
-
-                }
-            }).then(res => {
+            const placeOrder = await orderModel.updateOne({ user }, { $addToSet: { orders } })
+            .then(res => {
                 cartModel.findOneAndUpdate({ user }, { $set: { cartItem: [] } }).then(res => {
 
                     return resolve(true)

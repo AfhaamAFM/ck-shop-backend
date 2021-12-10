@@ -286,13 +286,13 @@ const {paymentId,paymentMethod,orderStatus}=req.body
 //@desc : Place order with cash on delivary
 //@route : /order/placeOrder/cod
 //@access : private
-router.post('/placeOrder/:orderId/cod',(req,res)=>{
+router.post('/placeOrder/cod',(req,res)=>{
 
 
     
 try {
     
-
+console.log('Reachinffff')
   
     const orderId = req.params.orderId
     const token = req.cookies.userToken
@@ -310,10 +310,10 @@ try {
     }
 
 
-const {paymentMethod,orderStatus}=req.body
+const {paymentMethod,orderStatus,amount,address,cartItems}=req.body
 
-
-placeCashOnDelivary(user,orderId,paymentMethod,orderStatus).then(samaanam=>{
+const orders = {paymentMethod,orderStatus,amount,address,cartItems}
+placeCashOnDelivary(user,orders).then(samaanam=>{
 
 
 res.json(samaanam)
