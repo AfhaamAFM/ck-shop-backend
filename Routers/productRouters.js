@@ -67,7 +67,6 @@ router.get('/delete/:id', (req, res) => {
 // 
 router.post("/uploadImage", async (req, res) => {
     try {
-
         const token = req.cookies.userToken
         if (!token) {
 

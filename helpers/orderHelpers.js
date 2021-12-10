@@ -2,6 +2,7 @@ const orderModel = require('../models/OrderModel')
 const cartModel = require('../models/CartModel')
 const userModel = require('../models/userModel')
 const offerModel = require('../models/offerModel')
+const productModel = require('../models/productModel')
 
 module.exports = {
 
@@ -20,7 +21,7 @@ module.exports = {
 
                     return resolve(true)
                 })
-               
+
 
             } else {
 
@@ -49,8 +50,8 @@ module.exports = {
     getOrders: (user) => {
 
         return new Promise(async (resolve, reject) => {
-        //   await orderModel.updateOne({user},{$pull:{"orders":{'orders.orderStatus': null}}})
-            const order = await orderModel.findOne({user})
+            //   await orderModel.updateOne({user},{$pull:{"orders":{'orders.orderStatus': null}}})
+            const order = await orderModel.findOne({ user })
             return resolve(order)
 
         })
@@ -63,7 +64,7 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
 
             const allOrders = await orderModel.aggregate([
-                {$match: { 'orders.orderStatus':{ $ne: ''}}},
+                { $match: { 'orders.orderStatus': { $ne: '' } } },
 
                 { $unwind: '$orders' }
             ])
@@ -177,27 +178,45 @@ module.exports = {
     getCountData: () => {
         return new Promise(async (resolve, reject) => {
 
-            const orderCount = await orderModel.aggregate([
+            let orderCount = await orderModel.aggregate([
                 { $unwind: '$orders' },
                 { $match: { 'orders.orderStatus': 'ordered' } },
-                { $count: 'totalOrders' }
+                { $count: 'totalOrders' },
             ])
-            const totalSales = orderModel.aggregate([
+            const totalSales = await orderModel.aggregate([
                 { $unwind: '$orders' },
                 { $match: { 'orders.orderStatus': 'delivered' } },
                 {
                     "$group": {
                         "_id": "$orders.orderId",
-                        "Total sum": { "$sum": '$orders.amount' }
+                        "Totalsum": { "$sum": '$orders.amount' }
                     }
                 },
                 { $project: { _id: 0 } }
             ])
 
-            resolve({
+            const totalDelivered = await orderModel.aggregate([
+                { $unwind: '$orders' },
+                { $match: { 'orders.orderStatus': 'delivered' } },
+                { $count: 'totalDeliver' },
 
-                orderCount,
-                totalSales
+            ])
+
+            const totalProduct = await productModel.find({}).count()
+
+
+            let totalOrders = orderCount[0].totalOrders
+            let totalSalesAmount = totalSales[0].Totalsum
+            let totalDeliveryCount = totalDelivered[0].totalDeliver
+
+console.log('yehiii tehhiii')
+
+
+
+
+
+            resolve({
+               totalOrders,totalSalesAmount,totalDeliveryCount,totalProduct
             })
 
         })
@@ -222,7 +241,7 @@ module.exports = {
     },
 
     getReportData: (type) => {
-    
+
         const numberOfDays = type === 'Daily' ? 1 : type === 'Weekly' ? 7 : type === 'Monthly' ? 30 : type === 'Yearly' ? 365 : 0
         const dayOfYear = (date) =>
             Math.floor(
@@ -236,11 +255,14 @@ module.exports = {
                         $unwind: '$orders'
                     },
 
-                    { $match: { $and: [{"orders.paymentResult.payed_Date" : { $gte: new Date(new Date() - numberOfDays * 60 * 60 * 24 * 1000) }}, { 'orders.orderStatus': 'delivered' }, { 'amount': { $ne: 0 } }] } },
-                 
-                    { $project: { email: 1, 'orders.orderId': 1, 'orders.amount': 1, 'orders.orderItem': 1, 'orders.paymentResult': 1,'orders.paymentMethod': 1
-                } },
- 
+                    { $match: { $and: [{ "orders.paymentResult.payed_Date": { $gte: new Date(new Date() - numberOfDays * 60 * 60 * 24 * 1000) } }, { 'orders.orderStatus': 'delivered' }, { 'amount': { $ne: 0 } }] } },
+
+                    {
+                        $project: {
+                            email: 1, 'orders.orderId': 1, 'orders.amount': 1, 'orders.orderItem': 1, 'orders.paymentResult': 1, 'orders.paymentMethod': 1
+                        }
+                    },
+
                     {
                         $sort: { date: -1 }
                     }

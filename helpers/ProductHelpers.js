@@ -197,29 +197,38 @@ console.log(_id);
     },
     uploadImage: (imageHere,public_id) => {
 
-        return new Promise(async (resolve, reject) => {
-            console.log('reached here');
-            if(public_id){
-            await  cloudinary.uploader.destroy(public_id, function(error,result) {
-                console.log(result, error) });  
-            }
-            cloudinary.uploader.upload(imageHere, {
-                upload_preset: 'fnpbm7gw'
-            }).then(response => {
-
-                const { public_id, url:img } = response
-
-                const image = { public_id, img }
-                resolve(image)
-
-            }).catch(err => {
-                console.log('this is the error form product helpers eror clodinfnaty' + err);
-
-
+        try {
+            console.log('reached image uplod helpers');
+            return new Promise(async (resolve, reject) => {
+                console.log('reached here');
+                if(public_id){
+                await  cloudinary.uploader.destroy(public_id, function(error,result) {
+                    console.log(result, error) });  
+                }
+    
+    
+                cloudinary.uploader.upload(imageHere, {
+                    upload_preset: 'fnpbm7gw'
+                }).then(response => {
+    
+                    const { public_id, url:img } = response
+    
+                    const image = { public_id, img }
+                    resolve(image)
+            
+                }).catch(err => {
+                    console.log('this is the error form product helpers eror clodinfnaty' + err);
+    
+    
+                })
+    
+    
             })
+        } catch (error) {
+            console.log('this is the error form product helpers eror clodinfnaty' + error);
 
-
-        })
+        }
+       
     }
 
 
