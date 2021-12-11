@@ -1,5 +1,5 @@
 const { addCoupen, fetchCoupen, deleteCoupen } = require('../helpers/coupenHelpers')
-const { addOffer, fetchOffer, applyProductOffer, removeOffer, applyCategoryOffer } = require('../helpers/offerHelpers')
+const { addOffer, fetchOffer, applyProductOffer, removeOffer, applyCategoryOffer, removeCatOffer } = require('../helpers/offerHelpers')
 
 const router =require('express').Router()
 
@@ -118,6 +118,32 @@ res.json(response)
 
 })
 
+
+// /offer/removeOffer/category/${categoryId}
+
+router.get('/removeOffer/category/:category',(req,res)=>{
+
+try {
+    const category = req.params.category
+
+removeCatOffer(category).then(response=>{
+
+
+    res.json(response)
+})
+
+    
+} catch (error) {
+    
+console.log('this is remove cat offe error  '+ error)
+
+}
+
+
+
+
+
+})
 //=============================cCOUPEN CAN ALSO CAN APPLEID BETWEEN======================================
 router.post('/addCoupen',(req,res)=>{
 try {

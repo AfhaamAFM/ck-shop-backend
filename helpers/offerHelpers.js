@@ -1,5 +1,6 @@
 const offerModel = require('../models/offerModel')
 const productModel = require('../models/productModel')
+const catModel =require('../models/categoryModel')
 
 
 module.exports = {
@@ -146,16 +147,24 @@ module.exports = {
             const offer = await offerModel.findOne({ _id: offerID })
             const products = await productModel.find({ category })
             let offerCount = 0
-            products.forEach(async(prod, i) => {
+            const getCategory = await catModel.find({category})
 
-                let
+const {isOffer,offer:oldOffer}=getCategory
 
+if(isOffer){
 
-                    discountPrice = 0
-                let
+if(oldOffer.percentage>offer.percentage){
 
+    return resolve({ warning: `There is a higher offer of ${oldOffer.ercentage} % applied` })
+}
+    
+}
 
-                    offerPrice = 0
+ catModel.updateOne({category},{isOffer:true,offer}).then(res=>{
+            products.forEach(async (prod, i) => {
+
+                let discountPrice = 0
+                let offerPrice = 0
 
 
                 if (prod.isOffer) {                    //offer is there
@@ -187,7 +196,7 @@ module.exports = {
                 }
 
             })
-
+        })
 
             if (offerCount) {
 
@@ -212,7 +221,53 @@ module.exports = {
 
         })
 
-    }
+    },
+
+    // remove category offer
+
+    
+removeCatOffer:(category)=>{
+
+return new Promise(async(resolve,reject)=>{
+
+    catModel.updateOne({ category}, { $set: { isOffer: false, offer: '' } }).then(async (r)=>{
+        let count= 0
+const products =await productModel.find({category})
+
+products.forEach(async(prdct,i)=>{
+
+if(prdct.isOffer){
+
+    await productModel.updateOne({ _id:prdct._id }, { $set: { isOffer: false, offer: '' } })
+
+
+}else {
+
+    count++
+}
+
+
+})
+
+if (count) {
+
+    return resolve({ response: `Offer removed for ${products.length - count} products` })
+} else {
+
+    return resolve({ response: `Offer removed for ${products.length} products` })
+
+}
+
+    })
+
+
+   
+
+
+})
+
+
+}
 
 
 
