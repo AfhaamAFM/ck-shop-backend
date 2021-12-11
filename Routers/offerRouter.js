@@ -1,4 +1,5 @@
-const { addOffer, fetchOffer, applyProductOffer, removeOffer } = require('../helpers/offerHelpers')
+const { addCoupen, fetchCoupen, deleteCoupen } = require('../helpers/coupenHelpers')
+const { addOffer, fetchOffer, applyProductOffer, removeOffer, applyCategoryOffer } = require('../helpers/offerHelpers')
 
 const router =require('express').Router()
 
@@ -99,9 +100,67 @@ res.json(response)
 
 // remove offer from product end
 
+router.post('/applyCategoryOffer',(req,res)=>{
+try {
+    const{category,offerId}=req.body
+    // console.log(category,offerId)
+    applyCategoryOffer(category,offerId).then(response=>{
+res.json(response)
 
 
+})
 
+} catch (error) {
+    console.log('This ois category offer error  '+error)
+}
+
+
+})
+
+//=============================cCOUPEN CAN ALSO CAN APPLEID BETWEEN======================================
+router.post('/addCoupen',(req,res)=>{
+try {
+    const{name,expiryDate,percentage}=req.body
+
+addCoupen(name,expiryDate,percentage).then(response=>{
+
+res.json(response)
+})
+
+} catch (error) {
+    
+console.log('This is add coupen error ' +error)
+
+}
+
+
+})
+
+
+// get all coupen
+
+router.get('/coupen',(req,res)=>{
+    
+fetchCoupen().then(response=>{
+
+    res.json(response)
+})
+
+
+})
+
+// delete coupen 
+
+router.get('/coupen/delete/:id',(req,res)=>{
+    
+  const coupenId = req.params.id
+    deleteCoupen(coupenId).then(response=>{
+    
+        res.json(response)
+    })
+    
+    
+    })
 
 
 

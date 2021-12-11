@@ -26,6 +26,8 @@ const productSchema = new mongoose.Schema({
         expiryDate: { type: Date },
 
     }
+
+    
 })
 
 const newProduct = mongoose.model('Products', productSchema)
