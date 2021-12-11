@@ -102,8 +102,9 @@ res.json(response)
 
 router.post('/applyCategoryOffer',(req,res)=>{
 try {
-    const{category,offerId}=req.body
+    const{offeredCategory,offerId}=req.body
     // console.log(category,offerId)
+    const category = offeredCategory
     applyCategoryOffer(category,offerId).then(response=>{
 res.json(response)
 
