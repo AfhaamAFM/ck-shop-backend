@@ -382,12 +382,12 @@ router.post('/imageUpload', async (req, res) => {
 
     // console.log(req.body);
 
-
+if(oldImage){
     await cloudinary.uploader.destroy(oldImage.public_id, function (error, result) {
       console.log(result, error)
     });
 
-
+  }
 
     const uploadResponse = await cloudinary.uploader.upload(imageHere, {
       upload_preset: 'fnpbm7gw'

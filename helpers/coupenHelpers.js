@@ -2,7 +2,7 @@ const coupenModel =require('../models/coupenModel')
 
 module.exports={
 
-addCoupen:(nam,expiry,percentage)=>{
+addCoupen:(nam,expiry,percentage,minAmount)=>{
 const name= nam.toUpperCase()
     const expiryDate= new Date(expiry)
 return new Promise(async(resolve,reject)=>{
@@ -23,7 +23,7 @@ if (existCoupen) {
 }
 
 
-const newCoupen = new coupenModel({ name, expiryDate, percentage })
+const newCoupen = new coupenModel({ name, expiryDate, percentage,minAmount })
 await newCoupen.save()
 return resolve(true)
 

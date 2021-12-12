@@ -4,7 +4,8 @@ const coupenSchema = new mongoose.Schema({
 
 name:{type:String,required:true},
 expiryDate:{type:Date,required:true},
-percentage:{type:Number,required:true}
+percentage:{type:Number,required:true},
+minAmount:{type:Number,required:true}
 
 
 },{timestamps:true})

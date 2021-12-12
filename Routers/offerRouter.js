@@ -147,9 +147,9 @@ console.log('this is remove cat offe error  '+ error)
 //=============================cCOUPEN CAN ALSO CAN APPLEID BETWEEN======================================
 router.post('/addCoupen',(req,res)=>{
 try {
-    const{name,expiryDate,percentage}=req.body
+    const{name,expiryDate,percentage,minAmount}=req.body
 
-addCoupen(name,expiryDate,percentage).then(response=>{
+addCoupen(name,expiryDate,percentage,minAmount).then(response=>{
 
 res.json(response)
 })
