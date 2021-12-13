@@ -224,22 +224,31 @@ var razorpay = new Razorpay({
 });
 
 router.get('/razorpay/payAmount/:amount', async (req, res) => {
-    const amount =req.params.amount
-    console.log('reached');
-    const options = {
-        amount: 767,
-        currency: "INR",
-        receipt: shortid.generate(),
+    try {
+        const amount =req.params.amount
+    const price = Math.round(amount*100)
 
+        console.log('reached');
+        const options = {
+            amount: price ,
+            currency: "INR",
+            receipt: shortid.generate(),
+    
+    
+        }
+        const response = await razorpay.orders.create(options)
+        console.log(response)
+        res.json({
+            id: response.id,
+            currency: response.currency,
+            amount: response.currency
+        })
+    } catch (error) {
+        
 
+        console.log('this is order RAZOR ',error)
     }
-    const response = await razorpay.orders.create(options)
-    console.log(response)
-    res.json({
-        id: response.id,
-        currency: response.currency,
-        amount: response.currency
-    })
+   
 
 
 })
