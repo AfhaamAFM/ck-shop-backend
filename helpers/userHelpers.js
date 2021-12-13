@@ -144,6 +144,17 @@ return resolve(true)
 
 
 
+},
+updateWalllet:(wallet,_id)=>{
+    return new Promise((resolve,reject)=>{
+
+userModel.updateOne({_id},{$set:{wallet}}).then(res=>{
+
+    resolve(true)
+})
+
+
+    })
 }
 
 

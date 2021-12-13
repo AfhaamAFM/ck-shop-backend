@@ -3,7 +3,7 @@ const userModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const userHelpers = require('../helpers/userHelpers');
-const { addAddress, deleteAddress, editUser, changePassword, editAddress } = require("../helpers/userHelpers");
+const { addAddress, deleteAddress, editUser, changePassword, editAddress, updateWalllet } = require("../helpers/userHelpers");
 const { cloudinary } = require('./utils/cloudinary')
 let referralCodeGenerator = require('referral-code-generator')
 
@@ -426,6 +426,46 @@ router.get('/deleteImage', async (req, res) => {
   } catch (error) {
     console.error('this is delte image error  ' + error);
   }
+
+
+})
+
+//wallet money aptation
+
+router.post('/wallet',(req,res)=>{
+
+try {
+
+
+  const token = req.cookies.userToken
+  if (!token) {
+
+    return res.json({ 'response': 'User not logged in' })
+    console.log('JKBJKBHJD');
+  }
+  const { user: _id } = jwt.verify(token, process.env.JWT_SECRET_USER)
+  if (!_id) {
+    console.log('dsdsdsd');
+
+    return res.json({ 'response': 'User not verified' })
+  }
+
+
+
+const {currentWalletMoney:wallet} = req.body
+
+
+
+  updateWalllet(wallet,_id).then(response=>{
+
+res.json(response)
+
+  })
+  
+} catch (error) {
+  console.log('this is the wallet error')
+}
+
 
 
 })

@@ -99,7 +99,6 @@ router.post('/user/placeOrder', (req, res) => {
 
 
         const { amount, address, paymentMethod, orderStatus, cartItems,paymentId } = req.body
-
         const { cartItem, cartProduct } = cartItems
 
         let orderItem = []
