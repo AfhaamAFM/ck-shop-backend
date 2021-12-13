@@ -562,4 +562,41 @@ router.get('/sales-report/type/:type',(req,res)=>{
     
     })
 
+
+
+ router.get('/dashboard/chart',async (req,res)=>{
+     try {
+    let userData=[]
+    let weeklyData=[]
+ const totalCount = await userModel.find({}).count()
+ const totalBlocked = await userModel.find({isActive:false}).count()
+userData[0]=(totalCount-totalBlocked)
+userData[1]=(totalBlocked)
+console.log(userData)
+
+
+getReportData('Weekly').then(response=>{
+
+    response.map((value)=>{
+        weeklyData.push(value.orders.amount)
+       
+           })
+           const data ={
+            user:userData,
+    sales:weeklyData
+    }
+    
+    res.json(data)
+   }) 
+
+ 
+
+} catch (error) {
+    console.log('This is the error  ' +error)  
+}
+
+
+
+ })   
+
 module.exports = router
