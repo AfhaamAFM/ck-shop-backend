@@ -570,9 +570,7 @@ router.get('/sales-report/type/:type',(req,res)=>{
     let weeklyData=[]
  const totalCount = await userModel.find({}).count()
  const totalBlocked = await userModel.find({isActive:false}).count()
-userData[0]=(totalCount-totalBlocked)
-userData[1]=(totalBlocked)
-console.log(userData)
+
 
 
 getReportData('Weekly').then(response=>{

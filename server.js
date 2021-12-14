@@ -4,9 +4,7 @@ const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
-const { urlencoded } = require('express')
 const app = express()
-const fileupload = require('express-fileupload');
 const cloudinary =require('./Routers/utils/cloudinary')
 const chalk =require('chalk')
 
@@ -24,17 +22,6 @@ mongoose.connect(process.env.MDB_CONNECT, {
     if (err) return console.log(err);
     console.log('Connected Database')
 })
-
-// mongoose.connect(process.env.MDB_CONNECT, {
-
-//     useNewUrlParser: true,
-//     useUnifiedTopology:true,
-// }, (err) => {
-//     if (err) return console.log(err);
-//     console.log("connected monogDB");
-// })
-
-
 
 
 // app middleware
