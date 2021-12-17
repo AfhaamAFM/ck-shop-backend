@@ -36,7 +36,7 @@ router.post("/signup", async (req, res) => {
     if (existPhone) {
       return res.json({ response: "Mobile number already exist" });
     }
-
+if(refcode){
     const isRefCode = await userModel.findOne({ refCode:refcode })
 const {_id} = isRefCode
     if (!isRefCode) {
@@ -47,7 +47,7 @@ const {_id} = isRefCode
   //  await userModel.updateOne({ refCode:refcode }, { $inc: { wallet: 10 } })
 console.log(_id,isRefCode)
     // password hash
-
+  }
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
     let isActive = true; //block status
